@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby -wKU
+
+def do_the_link(filename)
+  homedir      = Dir.home # `command` returns the command's output, plus a newline. Remove it with chomp
+  pwdpath      = Dir.pwd
+  fullfilepath = "#{pwdpath}/#{filename}"
+  basename     = `basename #{fullfilepath}`.chomp
+  dotname      = ".#{basename}"
+  dotpath      = "#{homedir}/#{dotname}"
+
+  if File.symlink? dotpath #----- if already symlink, remove
+    File.delete dotpath
+
+  elsif File.exists? dotpath #--- if already exists, back up to backup directory
+    puts "dotfile exists already!"
+    puts "moving file to backup"
+    do_the_backup(dotpath) # back file up
+    # continue as normal
+  end
+
+  puts "linking #{fullfilepath} to #{dotpath}" # the actual linking bit
+  File.symlink fullfilepath, linkfilepath
+end
+
+def do_the_backup(dotpath)
+  backup_root = "./.backup"
+  backup_dir  = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
+
+  # if the backup root doesn't already exist
+  unless (File.exists? backup_root && File.directory backup_root)
+    Dir.mkdir "#{backup_root}"
+  end
+  # if the backup subdirectory doesn't already exist
+  unless (File.exists? backup_dir && File.directory backup_dir)
+    Dir.mkdir "#{backup_dir}"
+  end
+
+  if File.exists?" #{backup_root}/#{backup_dir}/#{dotpath}"
+
+  else
+    # the actual backup bit
+    puts "moving #{dotpath} to #{backup_dir}"
+    File.rename dotpath, "#{backup_root}/#{backup_dir}/#{dotpath}"
+  end
+end

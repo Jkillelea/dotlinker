@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Links a file from this folder to a symlink in the home directory
+set -e
+
+function make_the_symlink {
+  ln -s -T $1 $2
+}
+
+function do_the_link {
+  FULLFILEPATH="$(pwd)/$1"
+  BASENAME=$(basename $FULLFILEPATH)
+  DOTNAME=".$BASENAME"
+
+  if [[ ! -e $HOME/$DOTNAME ]]; then #--------------- doesn't exist
+    echo "linking $FULLFILEPATH to $HOME/$DOTNAME"
+    make_the_symlink $FULLFILEPATH "$HOME/$DOTNAME"
+
+  elif [[ -h $HOME/$DOTNAME ]]; then #--------------- is a symlink
+    rm $HOME/$DOTNAME && \
+    echo "linking $FULLFILEPATH to $HOME/$DOTNAME"
+    make_the_symlink $FULLFILEPATH "$HOME/$DOTNAME"
+
+  elif [[ -e $HOME/$DOTNAME ]]; then #--------------- already exists
+    echo "dotfile exists already!"
+    # echo "File name: $FULLFILEPATH"
+    # echo "Dotfile name: ~/$DOTNAME"
+    echo "moving file to backup..."
+    do_the_backup $HOME/$DOTNAME
+    echo "linking $FULLFILEPATH to $HOME/$DOTNAME"
+    make_the_symlink $FULLFILEPATH "$HOME/$DOTNAME"
+  fi
+}
+
+
+function do_the_backup {
+  if [[ ! -d .backup ]]; then # if the .backup folder doesn't exist
+    mkdir .backup
+  fi
+
+  BACKUP_DIRNAME=".backup/backup-$(date "+%y-%m-%d")" # .backup/backup-year-month-day
+  if [[ ! -d $BACKUP_DIRNAME ]]; then # if this doesn't already exist
+    mkdir $BACKUP_DIRNAME
+  fi
+  echo "moving $1 to $BACKUP_DIRNAME"
+  mv $1 $BACKUP_DIRNAME/$1
+}
+
+
+for file in $@; do
+  FULLFILEPATH="$(pwd)/$file"
+  BASENAME=$(basename $FULLFILEPATH)
+  DOTNAME=".$BASENAME"
+
+  if [[ -f "~/$DOTNAME" ]]; then
+    do_the_backup $file
+  fi
+
+  do_the_link $file
+done
