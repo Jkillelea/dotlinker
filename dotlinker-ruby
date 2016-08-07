@@ -44,3 +44,15 @@ def do_the_backup(dotpath)
     File.rename dotpath, fullbackup_path
   end
 end
+
+ARGV.each do |file|
+  fullfilepath = "#{Dir.pwd}/#{file}"
+  basename     = `basename #{fullfilepath}`.chomp
+  dotname      = ".#{basename}"
+
+  if File.exists? "~/#{dotname}"
+    do_the_backup file
+  end
+
+  do_the_link file
+end
