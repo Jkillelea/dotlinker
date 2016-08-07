@@ -23,10 +23,11 @@ def do_the_link(filename)
 end
 
 def do_the_backup(dotpath)
-  backup_root = "./.backup"
-  backup_dir  = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
+  backup_root     = "./.backup"
+  backup_dir      = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
+  fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotpath}"
 
-  # if the backup root doesn't already exist
+  # if the backup root (./.backup) doesn't already exist
   unless (File.exists? backup_root && File.directory backup_root)
     Dir.mkdir "#{backup_root}"
   end
@@ -35,11 +36,11 @@ def do_the_backup(dotpath)
     Dir.mkdir "#{backup_dir}"
   end
 
-  if File.exists?" #{backup_root}/#{backup_dir}/#{dotpath}"
-
+  if File.exists? fullbackup_path # if we've already done this at least once today
+    raise "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
   else
     # the actual backup bit
     puts "moving #{dotpath} to #{backup_dir}"
-    File.rename dotpath, "#{backup_root}/#{backup_dir}/#{dotpath}"
+    File.rename dotpath, fullbackup_path
   end
 end
