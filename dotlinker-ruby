@@ -1,13 +1,11 @@
 #!/usr/bin/env ruby -wKU
 require "./lib/dotfile.rb"
 
-def do_the_link(filename)
-  homedir      = Dir.home # `command` returns the command's output, plus a newline. Remove it with chomp
-  pwdpath      = Dir.pwd
-  fullfilepath = "#{pwdpath}/#{filename}"
-  basename     = `basename #{fullfilepath}`.chomp
-  dotname      = ".#{basename}"
-  dotpath      = "#{homedir}/#{dotname}"
+def do_the_link(dotfile)
+  fullfilepath = dotfile.absolute_path
+  basename     = dotfile.basename
+  dotpath      = "#{Dir.home}/#{dotfile.dot}"
+
 
   if File.symlink? dotpath #----- if already symlink, remove
     File.delete dotpath
@@ -19,8 +17,8 @@ def do_the_link(filename)
     # continue as normal
   end
 
-  puts "linking #{fullfilepath} to #{dotpath}" # the actual linking bit
-  File.symlink fullfilepath, linkfilepath
+  puts "linking #{dotfile.absolute_path} to #{dotpath}" # the actual linking bit
+  File.symlink dotfile.absolute_path, dotpath
 end
 
 def do_the_backup(dotpath)
@@ -47,7 +45,7 @@ def do_the_backup(dotpath)
 end
 
 ARGV.each do |file|
-  dotfile = DotFile.new(file)
+  dotfile      = DotFile.new(file)
   fullfilepath = dotfile.absolute_path
   basename     = dotfile.basename
   dotname      = dotfile.dot
@@ -56,5 +54,5 @@ ARGV.each do |file|
     do_the_backup file
   end
 
-  do_the_link file
+  do_the_link dotfile
 end
