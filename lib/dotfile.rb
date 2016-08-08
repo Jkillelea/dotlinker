@@ -2,7 +2,7 @@ require_relative "dotfileutils.rb"
 
 class DotFile
 
-  attr_accessor :absolute_path, :basename
+  attr_accessor :basename, :absolute_path, :dotfile_path
 
   def initialize(relative_filepath) # determine absolute path and basename from a given file path
     unless File.exists?(File.absolute_path relative_filepath)
@@ -39,10 +39,9 @@ class DotFile
       return @basename
     end
   end
-
-  def dot!
-    @basename = self.dot
-  end
+  # def dot!
+  #   @basename = self.dot
+  # end
 
 
 end
