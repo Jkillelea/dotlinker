@@ -21,10 +21,11 @@ def do_the_link(dotfile)
   File.symlink dotfile.absolute_path, dotpath
 end
 
-def do_the_backup(dotpath)
+# TODO: not working atm
+def do_the_backup(dotfile)
   backup_root     = "./.backup"
   backup_dir      = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
-  fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotpath}"
+  fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
 
   # if the backup root (./.backup) doesn't already exist
   unless (File.exists? backup_root && File.directory backup_root)
@@ -39,8 +40,8 @@ def do_the_backup(dotpath)
     raise "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
   else
     # the actual backup bit
-    puts "moving #{dotpath} to #{backup_dir}"
-    File.rename dotpath, fullbackup_path
+    puts "moving #{dotfile.dot} to #{backup_dir}"
+    File.rename "#{Dir.home}/#{dotfile.dot}", fullbackup_path
   end
 end
 
@@ -48,10 +49,11 @@ ARGV.each do |file|
   dotfile      = DotFile.new(file)
   fullfilepath = dotfile.absolute_path
   basename     = dotfile.basename
-  dotname      = dotfile.dot
+  dotfile_path = "#{Dir.home}/#{dotfile.dot}"
 
-  if File.exists? "~/#{dotname}"
-    do_the_backup file
+  # look for an existing dotfile
+  if File.exists? dotfile_path
+    do_the_backup dotfile
   end
 
   do_the_link dotfile
