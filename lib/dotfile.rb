@@ -10,6 +10,7 @@ class DotFile
     end
     @absolute_path = File.absolute_path relative_filepath
     @basename = File.basename @absolute_path
+    @dotfile_path = "#{Dir.home}/#{dotfile.dot}"
   end
 
   def is_dotted? # true if file begins with a '.'
