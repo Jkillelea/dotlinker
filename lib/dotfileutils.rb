@@ -1,7 +1,7 @@
 module DotFileUtils
 
   def self.basename(filepath)
-    basename = `basename #{filepath}`.chomp
+    basename = File.basename filepath
   end
 
   def self.fullfilepath(filename)
