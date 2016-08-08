@@ -49,10 +49,10 @@ ARGV.each do |file|
   dotfile      = DotFile.new(file)
   fullfilepath = dotfile.absolute_path
   basename     = dotfile.basename
-  dotfile_path = "#{Dir.home}/#{dotfile.dot}"
+  dotfile.dotfile_path = "#{Dir.home}/#{dotfile.dot}"
 
-  # look for an existing dotfile
-  if File.exists? dotfile_path
+  # look for an existing dotfile in that location
+  if File.exists? dotfile.dotfile_path
     do_the_backup dotfile
   end
 
