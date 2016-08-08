@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby -wKU
+require "./lib/dotfile.rb"
 
 def do_the_link(filename)
   homedir      = Dir.home # `command` returns the command's output, plus a newline. Remove it with chomp
@@ -46,9 +47,10 @@ def do_the_backup(dotpath)
 end
 
 ARGV.each do |file|
-  fullfilepath = "#{Dir.pwd}/#{file}"
-  basename     = `basename #{fullfilepath}`.chomp
-  dotname      = ".#{basename}"
+  dotfile = DotFile.new(file)
+  fullfilepath = dotfile.absolute_path
+  basename     = dotfile.basename
+  dotname      = dotfile.dot
 
   if File.exists? "~/#{dotname}"
     do_the_backup file
