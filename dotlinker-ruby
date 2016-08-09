@@ -1,5 +1,10 @@
-#!/usr/bin/env ruby -wKU
-require "./lib/dotfile.rb"
+#!/usr/bin/ruby
+=begin
+Copyright Jacob Killelea <jkillelea@protonmail.ch>
+MIT license
+=end
+
+require_relative "./lib/dotfile.rb"
 
 def do_the_link(dotfile)
   fullfilepath = dotfile.absolute_path
@@ -23,17 +28,17 @@ end
 
 # TODO: not working atm
 def do_the_backup(dotfile)
-  backup_root     = "./.backup"
-  backup_dir      = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
+  backup_root     = "./backup"
+  backup_dir      = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
   fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
 
   # if the backup root (./.backup) doesn't already exist
-  unless (File.exists? backup_root && File.directory backup_root)
+  unless ((File.exists? backup_root) && (File.directory? backup_root))
     Dir.mkdir "#{backup_root}"
   end
   # if the backup subdirectory doesn't already exist
-  unless (File.exists? backup_dir && File.directory backup_dir)
-    Dir.mkdir "#{backup_dir}"
+  unless ((File.exists? backup_dir) && (File.directory? backup_dir))
+    Dir.mkdir "#{backup_root}/#{backup_dir}"
   end
 
   if File.exists? fullbackup_path # if we've already done this at least once today
