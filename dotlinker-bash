@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 # Links a file from this folder to a symlink in the home directory
+
+# DEPRECATED VERSION
+# USE RUBY IMPLEMENTATION INSTEAD
+# COPYRIGHT JACOB KILLELEA <jkillelea@protonmail.ch>
+# MIT LICENSE
+
 set -e
 
 function make_the_symlink {
