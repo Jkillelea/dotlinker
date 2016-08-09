@@ -1,4 +1,7 @@
-require_relative "dotfileutils.rb"
+=begin
+Copyright Jacob Killelea <jkillelea@protonmail.ch>
+MIT license
+=end
 
 class DotFile
 
@@ -10,11 +13,11 @@ class DotFile
     end
     @absolute_path = File.absolute_path relative_filepath
     @basename = File.basename @absolute_path
-    @dotfile_path = "#{Dir.home}/#{dotfile.dot}"
+    @dotfile_path = "#{Dir.home}/#{self.dot}"
   end
 
   def is_dotted? # true if file begins with a '.'
-    if basename[0] == '.'
+    if @basename[0] == '.'
       true
     else
       false
@@ -22,8 +25,8 @@ class DotFile
   end
 
   def undot # removes a preceeding dot from the file name, if there is one
-    unless self.is_dotted?
-      return DotFileUtils::undot @basename
+    if self.is_dotted?
+      return @basename[1...basename.length] # everything except the first character
     else
       return @basename
     end
@@ -34,15 +37,14 @@ class DotFile
   end
 
   def dot # adds a preceeding dot, if there isn't one
-    unless self.is_dotted?
-      return DotFileUtils::dot @basename
-    else
+    if self.is_dotted?
       return @basename
+    else
+      return ".#{@basename}"
     end
   end
   # def dot!
   #   @basename = self.dot
   # end
-
 
 end

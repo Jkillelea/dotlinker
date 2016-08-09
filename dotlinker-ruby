@@ -1,5 +1,10 @@
-#!/usr/bin/env ruby -wKU
-require "./lib/dotfile.rb"
+#!/usr/bin/ruby
+=begin
+Copyright Jacob Killelea <jkillelea@protonmail.ch>
+MIT license
+=end
+
+require_relative "./lib/dotfile.rb"
 
 def do_the_link(dotfile)
   fullfilepath = dotfile.absolute_path
@@ -9,7 +14,7 @@ def do_the_link(dotfile)
 
   if File.symlink? dotpath #----- if already symlink, remove
     File.delete dotpath
-
+    # continue as normal
   elsif File.exists? dotpath #--- if already exists, back up to backup directory
     puts "dotfile exists already!"
     puts "moving file to backup"
@@ -21,19 +26,18 @@ def do_the_link(dotfile)
   File.symlink dotfile.absolute_path, dotpath
 end
 
-# TODO: not working atm
 def do_the_backup(dotfile)
-  backup_root     = "./.backup"
-  backup_dir      = "backup-#{Time.year}-#{Time.month}-#{Time.day}"
+  backup_root     = "./backup"
+  backup_dir      = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
   fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
 
-  # if the backup root (./.backup) doesn't already exist
-  unless (File.exists? backup_root && File.directory backup_root)
+  # if the backup root (./backup) doesn't already exist
+  unless ((File.exists? backup_root) && (File.directory? backup_root))
     Dir.mkdir "#{backup_root}"
   end
   # if the backup subdirectory doesn't already exist
-  unless (File.exists? backup_dir && File.directory backup_dir)
-    Dir.mkdir "#{backup_dir}"
+  unless ((File.exists? backup_dir) && (File.directory? backup_dir))
+    Dir.mkdir "#{backup_root}/#{backup_dir}"
   end
 
   if File.exists? fullbackup_path # if we've already done this at least once today
@@ -51,10 +55,9 @@ ARGV.each do |file|
   fullfilepath = dotfile.absolute_path
   basename     = dotfile.basename
 
-  # look for an existing dotfile in that location
-  if File.exists? dotfile.dotfile_path
+  if File.exists? dotfile.dotfile_path # look for an existing dotfile in that location
     do_the_backup dotfile
   end
 
-  do_the_link dotfile
+  do_the_link dotfile # link the dotfile to the home directory
 end
