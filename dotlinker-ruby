@@ -44,6 +44,7 @@ def do_the_backup(dotfile)
   end
 end
 
+# Do the thing
 ARGV.each do |file|
   dotfile = DotFile.new(file)
   # look for an existing dotfile in that location
