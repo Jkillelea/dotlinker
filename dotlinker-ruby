@@ -27,12 +27,13 @@ def do_the_backup(dotfile)
   fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
 
   # if the backup root (./backup) doesn't already exist
-  unless ((File.exists? backup_root) && (File.directory? backup_root))
+  unless (File.directory? backup_root)
     Dir.mkdir "#{backup_root}"
   end
   # if the backup subdirectory doesn't already exist
-  unless ((File.exists? backup_dir) && (File.directory? backup_dir))
-    Dir.mkdir "#{backup_root}/#{backup_dir}"
+  daily_backup_folder = "#{backup_root}/#{backup_dir}"
+  unless (File.directory? daily_backup_folder)
+    Dir.mkdir daily_backup_folder
   end
 
   if File.exists? fullbackup_path # if we've already done this at least once today
