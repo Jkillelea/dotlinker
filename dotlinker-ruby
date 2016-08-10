@@ -7,23 +7,18 @@ MIT license
 require_relative "./lib/dotfile.rb"
 
 def do_the_link(dotfile)
-  fullfilepath = dotfile.absolute_path
-  basename     = dotfile.basename
-  dotpath      = "#{Dir.home}/#{dotfile.dot}"
-
-
-  if File.symlink? dotpath #----- if already symlink, remove
-    File.delete dotpath
+  if File.symlink? dotfile.dotfile_path #----- if already symlink, remove
+    File.delete dotfile.dotfile_path
     # continue as normal
-  elsif File.exists? dotpath #--- if already exists, back up to backup directory
+  elsif File.exists? dotfile.dotfile_path #--- if already exists, back up to backup directory
     puts "dotfile exists already!"
     puts "moving file to backup"
-    do_the_backup(dotpath) # back file up
+    do_the_backup(dotfile.dotfile_path) # back file up
     # continue as normal
   end
 
-  puts "linking #{dotfile.absolute_path} to #{dotpath}" # the actual linking bit
-  File.symlink dotfile.absolute_path, dotpath
+  puts "linking #{dotfile.absolute_path} to #{dotfile.dotfile_path}" # the actual linking bit
+  File.symlink dotfile.absolute_path, dotfile.dotfile_path
 end
 
 def do_the_backup(dotfile)
@@ -51,12 +46,10 @@ end
 
 ARGV.each do |file|
   dotfile      = DotFile.new(file)
-  fullfilepath = dotfile.absolute_path
-  basename     = dotfile.basename
 
   if File.exists? dotfile.dotfile_path # look for an existing dotfile in that location
-    do_the_backup dotfile
+    do_the_backup(dotfile)
   end
 
-  do_the_link dotfile # link the dotfile to the home directory
+  do_the_link(dotfile) # link the dotfile to the home directory
 end
