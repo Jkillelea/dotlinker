@@ -12,8 +12,8 @@ class DotFile
       raise "File does not exist!"
     end
     @absolute_path = File.absolute_path relative_filepath
-    @basename = File.basename @absolute_path
-    @dotfile_path = "#{Dir.home}/#{self.dot}"
+    @basename      = File.basename @absolute_path
+    @dotfile_path  = "#{Dir.home}/#{self.dot}"
   end
 
   def is_dotted? # true if file begins with a '.'
@@ -43,8 +43,5 @@ class DotFile
       return ".#{@basename}"
     end
   end
-  # def dot!
-  #   @basename = self.dot
-  # end
 
 end
