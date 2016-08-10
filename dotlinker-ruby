@@ -45,11 +45,11 @@ def do_the_backup(dotfile)
 end
 
 ARGV.each do |file|
-  dotfile      = DotFile.new(file)
-
-  if File.exists? dotfile.dotfile_path # look for an existing dotfile in that location
+  dotfile = DotFile.new(file)
+  # look for an existing dotfile in that location
+  if File.exists? dotfile.dotfile_path
     do_the_backup(dotfile)
   end
-
-  do_the_link(dotfile) # link the dotfile to the home directory
+  # link the dotfile to the home directory
+  do_the_link(dotfile)
 end
