@@ -7,10 +7,10 @@ MIT license
 require_relative "./lib/dotfile.rb"
 
 def do_the_link(dotfile)
-  if File.symlink? dotfile.dotfile_path #----- if already symlink, remove
+  if File.symlink? dotfile.dotfile_path # if already symlink, remove
     File.delete dotfile.dotfile_path
     # continue as normal
-  elsif File.exists? dotfile.dotfile_path #--- if already exists, back up to backup directory
+  elsif File.exists? dotfile.dotfile_path # if already exists, back up to backup directory
     puts "dotfile exists already!"
     puts "moving file to backup"
     do_the_backup(dotfile.dotfile_path) # back file up
