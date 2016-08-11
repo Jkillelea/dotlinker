@@ -4,7 +4,7 @@ Copyright Jacob Killelea <jkillelea@protonmail.ch>
 MIT license
 =end
 
-require_relative "./lib/dotfile.rb"
+require_relative "lib/dotfile.rb"
 
 def do_the_link(dotfile)
   if File.symlink? dotfile.dotfile_path # if already symlink, remove
