@@ -28,7 +28,7 @@ def do_the_backup(dotfile)
 
   # if the backup root (./backup) doesn't already exist
   unless (File.directory? backup_root)
-    Dir.mkdir "#{backup_root}"
+    Dir.mkdir backup_root
   end
   # if the backup subdirectory doesn't already exist
   daily_backup_folder = "#{backup_root}/#{backup_dir}"
