@@ -25,14 +25,14 @@ def do_the_backup(dotfile)
   unless File.symlink? dotfile.dotfile_path # check that the file we're backing up isn't just a symlink.
     backup_root     = "./backup"            # if it is a symlink, just leave it alone. We'll delete it in the next function call
     backup_dir      = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
-    fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
+    daily_backup_folder = "#{backup_root}/#{backup_dir}"
+    fullbackup_path = "#{daily_backup_folder}/#{dotfile.undot}"
 
     # if the backup root (./backup) doesn't already exist
     unless (File.directory? backup_root)
       Dir.mkdir backup_root
     end
     # if the backup subdirectory doesn't already exist
-    daily_backup_folder = "#{backup_root}/#{backup_dir}"
     unless (File.directory? daily_backup_folder)
       Dir.mkdir daily_backup_folder
     end
