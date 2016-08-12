@@ -22,8 +22,8 @@ def do_the_link(dotfile)
 end
 
 def do_the_backup(dotfile)
-  if !File.symlink? dotfile.dotfile_path # check that the file we're backing up isn't just a symlink.
-    backup_root     = "./backup"         # if it is a symlink, just leave it alone. We'll delete it in the next function call
+  unless File.symlink? dotfile.dotfile_path # check that the file we're backing up isn't just a symlink.
+    backup_root     = "./backup"            # if it is a symlink, just leave it alone. We'll delete it in the next function call
     backup_dir      = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
     fullbackup_path = "#{backup_root}/#{backup_dir}/#{dotfile.undot}"
 
