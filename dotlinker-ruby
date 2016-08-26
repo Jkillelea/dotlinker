@@ -38,7 +38,7 @@ def do_the_backup(dotfile)
     end
 
     if File.exists? fullbackup_path # if we've already done this at least once today
-      raise "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
+      raise BackupError, "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
     else
       # the actual backup bit
       puts "moving #{dotfile.dot} to #{backup_dir}"
