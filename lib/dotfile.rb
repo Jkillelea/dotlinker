@@ -45,3 +45,7 @@ class DotFile
   end
 
 end
+
+# Simple error class for things not being backed up properly
+class BackupError < RuntimeError
+end
