@@ -25,8 +25,8 @@ def do_the_link(dotfile)
     File.delete dotfile.dotfile_path
     # continue as normal
   elsif File.exists? dotfile.dotfile_path # if already exists, back up to backup directory
-    if_verbose "dotfile exists already!"
-    if_verbose "moving file to backup"
+    puts "dotfile exists already!"
+    puts "moving file to backup"
     do_the_backup(dotfile.dotfile_path) # back file up
     # continue as normal
   end
@@ -55,7 +55,7 @@ def do_the_backup(dotfile)
       raise BackupError, "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
     else
       # the actual backup bit
-      if_verbose "moving #{dotfile.dot} to #{backup_dir}"
+      puts "moving existing #{dotfile.dot} to #{backup_dir}"
       File.rename dotfile.dotfile_path, fullbackup_path
     end
   end
