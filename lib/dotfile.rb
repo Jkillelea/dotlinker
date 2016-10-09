@@ -8,12 +8,10 @@ class DotFile
   attr_accessor :basename, :absolute_path, :dotfile_path
 
   def initialize(relative_filepath) # determine absolute path and basename from a given file path
-    unless File.exists?(File.absolute_path relative_filepath)
-      raise "File does not exist!"
-    end
     @absolute_path = File.absolute_path relative_filepath
     @basename      = File.basename @absolute_path
     @dotfile_path  = "#{Dir.home}/#{self.dot}"
+    raise "File does not exist!" unless File.exists? @absolute_path # sanity check
   end
 
   def is_dotted? # true if file begins with a '.'
