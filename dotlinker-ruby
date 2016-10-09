@@ -6,18 +6,32 @@ MIT license
 
 require_relative "lib/dotfile.rb"
 
+Config = { # hold config values (keys are same as those in Options hash)
+  :verbose => false
+}
+Options = { # available options, and their key (keys are same as those in Config hash)
+  :verbose => ['-v', '--verbose']
+}
+
+def if_verbose(string)
+  if Config[:verbose]
+    puts string
+  end
+  return nil
+end
+
 def do_the_link(dotfile)
   if File.symlink? dotfile.dotfile_path # if already symlink, remove
     File.delete dotfile.dotfile_path
     # continue as normal
   elsif File.exists? dotfile.dotfile_path # if already exists, back up to backup directory
-    puts "dotfile exists already!"
-    puts "moving file to backup"
+    if_verbose "dotfile exists already!"
+    if_verbose "moving file to backup"
     do_the_backup(dotfile.dotfile_path) # back file up
     # continue as normal
   end
 
-  puts "linking #{dotfile.absolute_path} to #{dotfile.dotfile_path}" # the actual linking bit
+  if_verbose "linking #{dotfile.absolute_path} to #{dotfile.dotfile_path}" # the actual linking bit
   File.symlink dotfile.absolute_path, dotfile.dotfile_path
 end
 
@@ -41,15 +55,26 @@ def do_the_backup(dotfile)
       raise BackupError, "[ERROR]:: This file has already been backed up today! This programmer is too lasy to come up with a solution to that!"
     else
       # the actual backup bit
-      puts "moving #{dotfile.dot} to #{backup_dir}"
+      if_verbose "moving #{dotfile.dot} to #{backup_dir}"
       File.rename dotfile.dotfile_path, fullbackup_path
     end
   end
 end
 
+# parse options, if a command line arg is one of the available switches, set relevant Config parameter to true
+ARGV.each do |arg|
+  Options.each_with_index { |(key, val), index| # val is a string array
+    if val.include? arg
+      Config[key] = true
+    end
+  }
+end
+
 # Do the thing
-ARGV.each do |file|
-  dotfile = DotFile.new(file)
+ARGV.each do |arg|
+  next if arg[0] == '-' # if arg is a configuration option
+
+  dotfile = DotFile.new(arg)
   # look for an existing dotfile in that location
   if File.exists? dotfile.dotfile_path
     do_the_backup(dotfile)
