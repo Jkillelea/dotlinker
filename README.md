@@ -19,7 +19,7 @@ And without the `-v` or `--verbose` flag, it's pretty much the same deal.
 user@host:~/dotfile_folder$ dotlinker-ruby -v vimrc
 ```
 
-If a file already exists under that name, it backs up that file to ./backup/[backup-todays-date]
+If a file already exists under that name, it backs up that file to `./backup/backup-[todays-date]`
 ```shell
 user@host:~/dotfile_folder$ dotlinker-ruby vimrc
 moving existing .vimrc to backup-2016-10-09
