@@ -5,20 +5,7 @@ MIT license
 =end
 
 require_relative "lib/dotfile.rb"
-
-Config = { # hold config values (keys are same as those in Options hash)
-  :verbose => false
-}
-Options = { # available options, and their key (keys are same as those in Config hash)
-  :verbose => ['-v', '--verbose']
-}
-
-def if_verbose(string)
-  if Config[:verbose]
-    puts string
-  end
-  return nil
-end
+require_relative "lib/config.rb"
 
 def do_the_link(dotfile)
   if File.symlink? dotfile.dotfile_path # if already symlink, remove
@@ -32,10 +19,10 @@ end
 
 def do_the_backup(dotfile)
   unless File.symlink? dotfile.dotfile_path # check that the file we're backing up isn't just a symlink. If it is a symlink, just leave it alone. We'll delete it in the next function call
-    backup_root     = "./backup"
-    backup_dir      = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
+    backup_root = "./backup"
+    backup_dir  = "backup-#{Time.now.to_s.split(" ")[0]}" # TODO:: Something less haky!
     daily_backup_folder = "#{backup_root}/#{backup_dir}"
-    fullbackup_path = "#{daily_backup_folder}/#{dotfile.undot}"
+    fullbackup_path     = "#{daily_backup_folder}/#{dotfile.undot}"
 
     # if the backup root (./backup) doesn't already exist
     unless (File.directory? backup_root)
@@ -57,14 +44,8 @@ def do_the_backup(dotfile)
   end
 end
 
-# parse options, if a command line arg is one of the available switches, set relevant Config parameter to true
-ARGV.each do |arg|
-  Options.each_with_index { |(key, val), index| # val is a string array
-    if val.include? arg
-      Config[key] = true
-    end
-  }
-end
+# parse command line options
+parse_opts(ARGV)
 
 # Do the thing
 ARGV.each do |arg|
