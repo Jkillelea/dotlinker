@@ -13,7 +13,7 @@ def do_the_link(dotfile)
     # continue as normal
   end
 
-  if_verbose "linking #{dotfile.absolute_path} to #{dotfile.dotfile_path}" # the actual linking bit
+  Config.if_verbose "linking #{dotfile.absolute_path} to #{dotfile.dotfile_path}" # the actual linking bit
   File.symlink dotfile.absolute_path, dotfile.dotfile_path
 end
 
@@ -45,7 +45,7 @@ def do_the_backup(dotfile)
 end
 
 # parse command line options
-parse_opts(ARGV)
+Config.parse_opts(ARGV)
 
 # Do the thing
 ARGV.each do |arg|
