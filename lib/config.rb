@@ -24,6 +24,10 @@ module Config
     end
   end
 
+  def self.if_verbose(string)
+    puts string if Config.verbose?
+  end
+
   def self.verbose?
     Settings[:verbose]
   end
