@@ -1,3 +1,10 @@
+=begin
+  TODO: include an '--as' flag so you can call `dotlinker filename --as dotfile_name`
+  that'd make it very easy to keep a lot of profiles in some folder and give each one a unique name
+  and still be able to swap them in and out of the same symlink spot.
+  This requires rewiting some of the parsing logic so that it understands that not everything it is sent
+  is either a filename or a flag (there will now be settings for the --as flag)
+=end
 module Config
   Settings = { # hold config values (keys are same as those in Options hash)
     :verbose => false
@@ -17,9 +24,16 @@ module Config
     end
   end
 
-  def self.if_verbose(string)
-    if Settings[:verbose]
-      puts string
-    end
+  def self.verbose?
+    Settings[:verbose]
+  end
+  def self.help?
+    Settings[:help]
+  end
+  def self.settings
+    Settings
+  end
+  def self.options
+    Options
   end
 end
