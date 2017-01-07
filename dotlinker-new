@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+=begin
+Copyright Jacob Killelea <jkillelea@protonmail.ch>
+MIT license
+=end
+
+require_relative "lib/dotfile.rb"
+
+raise '[ERROR] need to give a filename!' if ARGV.length < 1
+
+ARGV.each do |path|
+  next if path[0] == '-'
+
+  dotfile = DotFile.new path
+
+  if File.exists? dotfile.dotfile_path
+    raise "[ERROR] File already exists in linking location"
+
+  elsif File.exists? dotfile.absolute_path
+    File.symlink dotfile.absolute_path, dotfile.dotfile_path
+  end
+
+end
